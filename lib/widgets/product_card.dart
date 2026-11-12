@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/product_model.dart';
 import '../views/product_details/product_details_view.dart';
-import '../../core/localization/app_localizations.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -10,8 +9,6 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return GestureDetector(
       onTap: () {
         Navigator.push(

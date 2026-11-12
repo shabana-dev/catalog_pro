@@ -1,3 +1,3 @@
-void logMessage(String message) {
-  print('LOG: $message');
-}
+// void logMessage(String message) {
+//   print('LOG: $message');
+// }

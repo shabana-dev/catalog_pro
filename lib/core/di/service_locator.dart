@@ -25,7 +25,8 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton(() => ApiService(getIt(), getIt()));
 
   // Blocs
-  getIt.registerFactory(() => AuthBloc(getIt()));
+  // AuthBloc requires both SecureStorage and ApiService
+  getIt.registerFactory(() => AuthBloc(getIt(), getIt()));
   getIt.registerFactory(() => ProductBloc(getIt()));
   getIt.registerFactory(() => FavouriteBloc());
   getIt.registerFactory(() => SettingsCubit(getIt()));

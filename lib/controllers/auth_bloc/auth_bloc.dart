@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/storage/secure_storage.dart';
 import '../../core/network/api_service.dart';
+import '../../models/user_model.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SecureStorage _secureStorage;
-  // Note: ApiService is needed for login, but for simplicity in this step
-  // I'll focus on the session management.
+  final ApiService _apiService;
 
-  AuthBloc(this._secureStorage) : super(AuthInitial()) {
+  AuthBloc(this._secureStorage, this._apiService) : super(AuthInitial()) {
     on<AppStarted>(_onAppStarted);
     on<LoginSubmitted>(_onLoginSubmitted);
     on<LogoutRequested>(_onLogoutRequested);
@@ -27,17 +27,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onLoginSubmitted(LoginSubmitted event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      // In a real app, call ApiService.login(event.username, event.password)
-      // For now, simulating a successful login with dummyjson logic
-      if (event.username == 'emilys' && event.password == 'emilyspass') {
-        const token = 'dummy_token'; // Should come from API
-        await _secureStorage.saveToken(token);
-        emit(Authenticated(token));
+      final response = await _apiService.login(event.username, event.password);
+      
+      if (response.statusCode == 200) {
+        final user = UserModel.fromJson(response.data);
+        await _secureStorage.saveToken(user.accessToken);
+        emit(Authenticated(user.accessToken));
       } else {
-        emit(AuthError('Invalid username or password'));
+        emit(AuthError('invalid_auth'));
       }
     } catch (e) {
-      emit(AuthError(e.toString()));
+      // Dio error or parsing error
+      emit(AuthError('invalid_auth'));
     }
   }
 
