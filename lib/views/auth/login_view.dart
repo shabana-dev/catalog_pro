@@ -97,13 +97,13 @@ class _LoginViewState extends State<LoginView> {
                       const SizedBox(height: 24),
 
                       // Password
-                      _buildInputLabel(l10n.translate('password')),
+                      _buildInputLabel(l10n.translate('passwor')),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _passwordController,
                         obscureText: _obscurePassword,
                         decoration: _buildInputDecoration(
-                          hint: l10n.translate('password'),
+                          hint: l10n.translate('passwor'),
                           icon: Icons.lock_outline_rounded,
                           suffix: IconButton(
                             icon: Icon(
